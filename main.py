@@ -132,7 +132,10 @@ async def send_app_info(update: Update, context: ContextTypes.DEFAULT_TYPE, user
     results = user_data[user_id]["current_results"]
     
     if index >= len(results):
-        await update.message.reply_text("❌ No hay más resultados disponibles.")
+        if hasattr(update, 'message') and update.message:
+            await update.message.reply_text("❌ No hay más resultados disponibles.")
+        elif hasattr(update, 'callback_query') and update.callback_query:
+            await update.callback_query.message.reply_text("❌ No hay más resultados disponibles.")
         return
     
     app = results[index]
